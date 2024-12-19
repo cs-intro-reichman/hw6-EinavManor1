@@ -8,17 +8,19 @@ public class Runigram {
 		//// Hide / change / add to the testing code below, as needed.
 		
 		// Tests the reading and printing of an image:	
-		Color[][] tinypic = read("tinypic.ppm");
+		Color[][] tinypic = read("ironman.ppm");
 		print(tinypic);
-
 		// Creates an image which will be the result of various 
 		// image processing operations:
-		Color[][] image;
+		Color[][] image = tinypic;
+		Color[][] imagemorph = scaled(tinypic, 100, 150);
 
+		morph(image ,imagemorph,3);
+		display(imagemorph);
 		// Tests the horizontal flipping of an image:
-		image = flippedHorizontally(tinypic);
-		System.out.println();
-		print(image);
+		//image = flippedHorizontally(tinypic);
+		//System.out.println();
+		//print(image);
 		
 		//// Write here whatever code you need in order to test your work.
 		//// You can continue using the image array.
