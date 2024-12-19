@@ -130,19 +130,11 @@ public class Runigram {
 		return intX;
 	}
 	private static Color luminance(Color pixel) {
-		int r = Integer.getInteger("%3s,", pixel.getRed());
-			double rDouble = (Math.floor(r * 0.299));
-			int lumR = DoubleToInt(rDouble);
-			int g = Integer.getInteger("%3s,", pixel.getGreen());
-			double gDouble = (Math.floor(g * 0.587));
-			int lumG = DoubleToInt(gDouble);
-			int b = Integer.getInteger("%3s,", pixel.getBlue());
-			double bDouble = (Math.floor(b * 0.114));
-			int lumB = DoubleToInt(bDouble);
-			Color lum = new Color(lumR,lumG,lumB);
-			return lum;
+		int lum = (int) (0.299 * pixel.getRed() + 0.587 * pixel.getGreen() + 0.114 * pixel.getBlue());
+		Color pixelLum = new Color(lum, lum, lum);
+			return pixelLum;
 		}
-
+		
 	
 	/**
 	 * Returns an image which is the grayscaled version of the given image.
@@ -150,13 +142,13 @@ public class Runigram {
 	public static Color[][] grayScaled(Color[][] image) {
 		int numRows =image.length;
 		int numCols =image[0].length;
+		Color [][] grayImage = new Color[numRows][numCols];
 		for (int i = 0; i < numRows; i++) {  
 			for (int j = 0; j < numCols; j++) {   
-				Color pixel = luminance(image[i][j]);
-				image[i][j] = luminance(pixel);
+				grayImage[i][j]=luminance(image[i][j]);
 			}
 		}
-		return image;
+		return grayImage;
 	}
 	
 	/**
@@ -183,37 +175,15 @@ public class Runigram {
 	 * values in the two input color.
 	 */
 	public static Color blend(Color c1, Color c2, double alpha) {
-		alpha = alpha/100;
-		int r1 = Integer.getInteger("%3s,", c1.getRed());
-		int r2 = Integer.getInteger("%3s,", c2.getRed());
-		int g1 = Integer.getInteger("%3s,", c1.getGreen());
-		int g2 = Integer.getInteger("%3s,", c2.getGreen());
-		int b1 = Integer.getInteger("%3s,", c1.getBlue());
-		int b2 = Integer.getInteger("%3s,", c2.getBlue());
-		double rDouble = (Math.floor((alpha * r1) + ((1 - alpha) * r2)));
-		int lumR = DoubleToInt(rDouble);
-		if (lumR > 255){
-			lumR = 255;
-		}else if (lumR < 0){
-			lumR = 0;
+		if(c1 == null || c2 == null){
+			System.out.println("is null");
 		}
+		int redNew = (int) (alpha * c1.getRed() + (1-alpha) * c2.getRed());
+		int greenNew = (int) (alpha * c1.getGreen() + (1-alpha) * c2.getGreen());
+		int blueNew = (int) (alpha * c1.getBlue() + (1-alpha) * c2.getBlue());
+		Color blendedPix = new Color(redNew, greenNew, blueNew);
 
-		double gDouble = (Math.floor((alpha * g1) + ((1 - alpha) * g2)));
-		int lumG = DoubleToInt(gDouble);
-		if (lumG > 255){
-			lumG = 255;
-		}else if(lumG < 0){
-			lumG = 0;
-		}
-		double bDouble = (Math.floor((alpha * b1) + ((1 - alpha) * b2)));
-		int lumB = DoubleToInt(bDouble);
-		if (lumB > 255){
-			lumB = 255;
-		}else if(lumB < 0){
-			lumB = 0;
-		}
-		Color lum = new Color(lumR,lumG,lumB);
-		return lum;
+	return blendedPix;
 	}
 	
 	/**
@@ -225,13 +195,13 @@ public class Runigram {
 	public static Color[][] blend(Color[][] image1, Color[][] image2, double alpha) {
 		int numRows =image1.length;
 		int numCols =image2[0].length;
+		Color[][] imageBlend = new Color[numRows][numCols];
 		for (int i = 0; i < numRows; i++) {  
 			for (int j = 0; j < numCols; j++) {   
-				Color pixel = blend(image1[i][j], image2[i][j], alpha);
-				image1[i][j] = (pixel);
+				imageBlend[i][j] = blend(image1[i][j], image2[i][j], alpha);
 			}
 		}
-		return image1;
+		return imageBlend;
 	}
 
 	/**
